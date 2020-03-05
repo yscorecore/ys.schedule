@@ -1,5 +1,8 @@
 using System;
 using System.Data;
+using System.Collections.Generic;
+using System.Text.RegularExpressions;
+using System.Linq;
 namespace YS.Schedule.Expressions
 {
     public class CodeTimeExpression : ITimeExpression
@@ -7,6 +10,8 @@ namespace YS.Schedule.Expressions
         const string MatchResultColumnName = "matchres";
         private DataRow timeRow;
         private DataColumn resultColumn;
+        private Dictionary<DataColumn, Func<DateTimeOffset, int>> timeParts = new Dictionary<DataColumn, Func<DateTimeOffset, int>>();
+
         private CodeTimeExpression()
         {
         }
@@ -19,14 +24,25 @@ namespace YS.Schedule.Expressions
         }
         private void FillData(DateTimeOffset dateTimeOffset)
         {
-            timeRow["y"]=dateTimeOffset.Year;
+            foreach (var kv in this.timeParts)
+            {
+                timeRow[kv.Key] = kv.Value(dateTimeOffset);
+            }
         }
         private void BuildDataTable(string expression)
         {
-            var calctable=  new DataTable();
-            calctable.Columns.Add(new DataColumn("y",typeof(int)));
-            resultColumn= calctable.Columns.Add("res",typeof(bool));
-            resultColumn.Expression=expression;
+            var calctable = new DataTable();
+            var parts = Regex.Matches(expression, "[a-zA-z]+").Cast<Match>().Select(p => p.Value).Distinct().ToList();
+            
+            foreach(var part in parts)
+            {
+                var handler = TimeParts.Handlers[part];
+                var column = calctable.Columns.Add(part, typeof(int));
+                timeParts.Add(column,handler);
+            }
+            
+            resultColumn = calctable.Columns.Add("res", typeof(bool));
+            resultColumn.Expression = expression;
             timeRow = calctable.NewRow();
             calctable.Rows.Add(timeRow);
         }
