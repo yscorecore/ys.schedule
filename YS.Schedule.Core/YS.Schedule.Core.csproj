@@ -5,4 +5,8 @@
     <RootNamespace>YS.Schedule</RootNamespace>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="YS.System.Base" Version="1.0.6" />
+  </ItemGroup>
+
 </Project>
