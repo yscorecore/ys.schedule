@@ -3,7 +3,7 @@ using System.Data;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using System.Linq;
-namespace YS.Schedule.Expressions
+namespace YS.Schedule.Expressions.Code
 {
     public class CodeTimeExpression : ITimeExpression
     {

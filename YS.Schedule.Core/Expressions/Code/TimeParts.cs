@@ -1,7 +1,7 @@
 using System;
 using System.Data;
 using System.Collections.Generic;
-namespace YS.Schedule.Expressions
+namespace YS.Schedule.Expressions.Code
 {
     internal class TimeParts
     {
