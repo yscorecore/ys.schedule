@@ -16,11 +16,11 @@ namespace YS.Schedule.Expressions.Code
             ["!="] = "<>",
             ["&&"] = " And ",
             ["&"] = " And ",
-            [";"] = " And ",
             ["||"] = " Or ",
-            ["|"] = " Or "
+            ["|"] = " Or ",
+            ["!"] = "Not "
         };
-        private static ISet<char> AllValidateChars = new HashSet<char>( new char[] { '<', '>', '!', '=', '%', '+', '-', '*', '/', '&', '|', '(', ')', ' ', '\t' });
+        private static ISet<char> AllValidateChars = new HashSet<char>(new char[] { '<', '>', '!', '=', '%', '+', '-', '*', '/', '&', '|', '(', ')', ' ', '\t' });
 
         private DataTable dataTable;
         private DataRow timeRow;
@@ -45,7 +45,6 @@ namespace YS.Schedule.Expressions.Code
                 this.FillData(dateTimeOffset);
                 return Convert.ToBoolean(timeRow[resultColumn]);
             }
-
         }
 
         public void Dispose()
@@ -79,17 +78,26 @@ namespace YS.Schedule.Expressions.Code
             Array.ForEach(fieldColumns, p => { timeParts[p] = TimeParts.Handlers[p.ColumnName]; });
 
             // Add Calc column
-          
-            var dataTableExpression = string.IsNullOrWhiteSpace(expression) ? TRUE_EXPRESSION : ToDataTableExpression(expression);
-            this.resultColumn = dataTable.Columns.Add(CALC_COLUMN_NAME, typeof(bool), dataTableExpression);
+            this.CreateCalcDataColumn(expression);
+
             this.timeRow = dataTable.NewRow();
             this.dataTable.Rows.Add(timeRow);
 
             this.TestExpression();
         }
-        private static string ToDataTableExpression(string originExpression)
+        private void CreateCalcDataColumn(string expression)
         {
-            return originExpression.Replace(ReplaceDic, StringComparison.InvariantCultureIgnoreCase);
+            var dataTableExpression = string.IsNullOrWhiteSpace(expression) ?
+                            TRUE_EXPRESSION :
+                            expression.Replace(ReplaceDic, StringComparison.InvariantCultureIgnoreCase);
+            try
+            {
+                this.resultColumn = dataTable.Columns.Add(CALC_COLUMN_NAME, typeof(object), dataTableExpression);
+            }
+            catch (Exception ex)
+            {
+                throw new CodeTimeExpressionException(ex.Message, ex);
+            }
         }
         private static void ValidateTimeParts(IEnumerable<string> timeParts)
         {
@@ -109,13 +117,18 @@ namespace YS.Schedule.Expressions.Code
                 }
                 if (!AllValidateChars.Contains(expression[i]))
                 {
-                    throw new CodeTimeExpressionException($"Illegal character at position [{i+1}].");
+                    throw new CodeTimeExpressionException($"Illegal character at position {i + 1}.");
                 }
             }
         }
         private void TestExpression()
         {
-            
+            this.FillData(DateTimeOffset.Now);
+            var testObj = timeRow[resultColumn];
+            if(testObj.GetType()!=typeof(bool))
+            {
+                throw new CodeTimeExpressionException("The expression should return a bool value.");
+            }
         }
 
     }

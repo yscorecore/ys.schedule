@@ -1,9 +1,8 @@
 using System;
-using System.Data;
 using System.Collections.Generic;
 namespace YS.Schedule.Expressions.Code
 {
-    internal class TimeParts
+    public class TimeParts
     {
         static TimeParts()
         {
@@ -13,76 +12,47 @@ namespace YS.Schedule.Expressions.Code
             RegisterHandler(p => p.Hour, "hour", "Hour", "h");
             RegisterHandler(p => p.Minute, "minute", "Minute", "m");
             RegisterHandler(p => p.Second, "second", "second", "s");
-            RegisterHandler(p => (int)p.DayOfWeek, "dayofweek", "DayOfWeek", "dow");
-            RegisterHandler(p => p.DayOfYear, "dayofyear", "DayOfYear", "doy");
-            RegisterHandler(HourOfYear, "hourofyear", "HourOfYear", "hoy");
-            RegisterHandler(HourOfMonth, "hourofmonth", "HourOfMonth", "hoM");
-            RegisterHandler(HourOfWeek, "hourofweek", "HourOfWeek", "how");
-            RegisterHandler(MiniteOfYear, "miniteofyear", "MiniteOfYear", "moy");
-            RegisterHandler(MiniteOfMonth, "miniteofmonth", "MiniteOfMonth", "moM");
-            RegisterHandler(MiniteOfDay, "miniteofday", "MiniteOfDay", "mod");
-            RegisterHandler(MiniteOfWeek, "miniteofweek", "MiniteOfWeek", "mow");
-            RegisterHandler(SecondOfYear, "secondofyear", "SecondOfYear", "soy");
-            RegisterHandler(SecondOfMonth, "secondofmonth", "SecondOfMonth", "soM");
-            RegisterHandler(SecondOfDay, "secondofday", "SecondOfDay", "sod");
-            RegisterHandler(SecondOfWeek, "secondofweek", "SecondOfWeek", "sow");
-            RegisterHandler(SecondOfHour, "secondofhour", "SecondOfHour", "soh");
+            RegisterHandler(p => (int)p.DayOfWeek, "week", "Week", "w");
+            RegisterHandler(p => p.DayOfYear, "dayofyear", "DayOfYear", "dy");
+            RegisterHandler(LastDayOfMonth, "lastdayofmonth", "LastDayOfMonth", "ldM");
+            RegisterHandler(LastDayOfYear, "lastdayofyear", "LastDayOfYear", "ldy");
+            RegisterHandler(WeekDayOfMonth, "weekdayofmonth", "WeekDayOfMonth", "wdM");
+            RegisterHandler(WeekDayOfYear, "weekdayofyear", "WeekDayOfYear", "wdy");
+            RegisterHandler(LastWeekDayOfMonth, "lastweekdayofmonth", "LastWeekDayOfMonth", "lwdM");
+            RegisterHandler(LastWeekDayOfYear, "lastweekdayofyear", "LastWeekDayOfYear", "lwdy");
         }
+
         public static Dictionary<string, Func<DateTimeOffset, int>> Handlers = new Dictionary<string, Func<DateTimeOffset, int>>();
 
-        private static void RegisterHandler(Func<DateTimeOffset, int> func, params string[] names)
+        public static void RegisterHandler(Func<DateTimeOffset, int> func, params string[] names)
         {
             Array.ForEach(names, name => { Handlers[name] = func; });
         }
-        private static int HourOfYear(DateTimeOffset dateTime)
+        public static int LastDayOfMonth(DateTimeOffset dateTime)
         {
-            return dateTime.DayOfYear * dateTime.Hour;
+            return DateTime.DaysInMonth(dateTime.Year, dateTime.Month) - dateTime.Day + 1;
         }
-        private static int HourOfMonth(DateTimeOffset dateTime)
+        public static int LastDayOfYear(DateTimeOffset dateTime)
         {
-            return dateTime.Day * 24 + dateTime.Hour;
+            var firstDayOnNextYear = new DateTimeOffset(new DateTime(dateTime.Year + 1, 1, 1));
+            var firstDayofThisYear = new DateTimeOffset(new DateTime(dateTime.Year, 1, 1));
+            return (firstDayOnNextYear - firstDayofThisYear).Days - dateTime.DayOfYear + 1;
         }
-        private static int HourOfWeek(DateTimeOffset dateTime)
+        public static int WeekDayOfMonth(DateTimeOffset dateTime)
         {
-            return (int)dateTime.DayOfWeek * 24 + dateTime.Hour;
+            return (dateTime.Day - 1) / 7 + 1;
         }
-        private static int MiniteOfYear(DateTimeOffset dateTime)
+        public static int LastWeekDayOfMonth(DateTimeOffset dateTime)
         {
-            return HourOfYear(dateTime) * 60 + MiniteOfDay(dateTime);
+            return (LastDayOfMonth(dateTime) - 1) / 7 + 1;
         }
-        private static int MiniteOfMonth(DateTimeOffset dateTime)
+        public static int WeekDayOfYear(DateTimeOffset dateTime)
         {
-            return HourOfMonth(dateTime) * 60 + MiniteOfDay(dateTime);
-
+            return (dateTime.DayOfYear - 1) / 7 + 1;
         }
-        private static int MiniteOfDay(DateTimeOffset dateTime)
+        public static int LastWeekDayOfYear(DateTimeOffset dateTime)
         {
-            return dateTime.Hour * 60 + dateTime.Minute;
+            return (LastWeekDayOfYear(dateTime) - 1) / 7 + 1;
         }
-        private static int MiniteOfWeek(DateTimeOffset dateTime)
-        {
-            return HourOfWeek(dateTime) * 60 + MiniteOfDay(dateTime);
-        }
-        private static int SecondOfYear(DateTimeOffset dateTime)
-        {
-            return MiniteOfYear(dateTime) * 60 + dateTime.Second;
-        }
-        private static int SecondOfMonth(DateTimeOffset dateTime)
-        {
-            return MiniteOfMonth(dateTime) * 60 + dateTime.Second;
-        }
-        private static int SecondOfDay(DateTimeOffset dateTime)
-        {
-            return MiniteOfDay(dateTime) * 60 + dateTime.Second;
-        }
-        private static int SecondOfWeek(DateTimeOffset dateTime)
-        {
-            return MiniteOfWeek(dateTime) * 60 + dateTime.Second;
-        }
-        private static int SecondOfHour(DateTimeOffset dateTime)
-        {
-            return dateTime.Minute * 60 + dateTime.Second;
-        }
-       
     }
 }
