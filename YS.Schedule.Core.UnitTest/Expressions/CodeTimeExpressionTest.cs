@@ -24,7 +24,7 @@ namespace YS.Schedule.Expressions
         [DataRow("y%100=20", "2020-03-02", true)]
         [DataRow("y=2020&M=3&d=2", "2020-03-02", true)]
         [DataRow("y+(M+d)*2=2030", "2020-03-02", true)]
-        [DataRow("M=3&d=2&h=8&m=40&s=23", "2020-03-02 08:40:23", true)] 
+        [DataRow("M=3&d=2&h=8&m=40&s=23", "2020-03-02 08:40:23", true)]
         [DataTestMethod]
         public void ShouldReturnExpectedValueWhenMatch(string expression, string dateTimeText, bool expected)
         {

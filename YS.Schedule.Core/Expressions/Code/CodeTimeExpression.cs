@@ -16,7 +16,6 @@ namespace YS.Schedule.Expressions.Code
             ["!="] = "<>",
             ["&&"] = " And ",
             ["&"] = " And ",
-            [";"] = " And ",
             ["||"] = " Or ",
             ["|"] = " Or ",
             ["!"] = "Not "
