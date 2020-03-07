@@ -12,7 +12,7 @@ namespace YS.Schedule.Expressions.Code
             RegisterHandler(p => p.Hour, "hour", "Hour", "h");
             RegisterHandler(p => p.Minute, "minute", "Minute", "m");
             RegisterHandler(p => p.Second, "second", "second", "s");
-            RegisterHandler(p => (int)p.DayOfWeek, "dayofweek", "DayOfWeek", "dw");
+            RegisterHandler(p => (int)p.DayOfWeek, "week", "Week", "w");
             RegisterHandler(p => p.DayOfYear, "dayofyear", "DayOfYear", "dy");
             RegisterHandler(LastDayOfMonth, "lastdayofmonth", "LastDayOfMonth", "ldM");
             RegisterHandler(LastDayOfYear, "lastdayofyear", "LastDayOfYear", "ldy");

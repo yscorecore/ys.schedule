@@ -3,7 +3,7 @@ using System.Data;
 using System;
 using YS.Schedule.Expressions.Code;
 using System.Globalization;
-namespace YS.Schedule.Expressions
+namespace YS.Schedule.Expressions.Code
 {
     [TestClass]
     public class CodeTimeExpressionTest
@@ -25,6 +25,12 @@ namespace YS.Schedule.Expressions
         [DataRow("y=2020&M=3&d=2", "2020-03-02", true)]
         [DataRow("y+(M+d)*2=2030", "2020-03-02", true)]
         [DataRow("M=3&d=2&h=8&m=40&s=23", "2020-03-02 08:40:23", true)]
+        [DataRow("s%5=0", "2020-03-02 08:40:25", true)]
+        [DataRow("d=1&s%5=0", "2020-03-02 08:40:25", false)]
+        [DataRow("dw=6", "2020-03-07 08:40:25", true)]
+        [DataRow("dy=366", "2020-12-31 08:40:25", true)]
+        [DataRow("ldM=25", "2020-03-07 08:40:25", true)]
+        [DataRow("ldy=366", "2020-01-01 08:40:25", true)]
         [DataTestMethod]
         public void ShouldReturnExpectedValueWhenMatch(string expression, string dateTimeText, bool expected)
         {
@@ -43,7 +49,6 @@ namespace YS.Schedule.Expressions
             }
         }
 
-        //[DataRow(null, typeof(ArgumentNullException), null)]
         [DataRow("Abc>5", "Unknow time part 'Abc'.")]
         [DataRow("[y>2015]", "Illegal character at position 1.")]
         [DataRow("(y>2015))", null)]
