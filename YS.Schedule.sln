@@ -11,9 +11,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{8F53C0CF-7
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "YS.Schedule.Core.UnitTest", "YS.Schedule.Core.UnitTest\YS.Schedule.Core.UnitTest.csproj", "{E4B35FF7-9F88-4BC9-A81E-E3E235D4CBDC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YS.Schedule.Host", "YS.Schedule.Host\YS.Schedule.Host.csproj", "{D6A34608-363D-4B84-8CDC-2D5F0634ED83}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "YS.Schedule.Host", "YS.Schedule.Host\YS.Schedule.Host.csproj", "{D6A34608-363D-4B84-8CDC-2D5F0634ED83}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YS.Schedule.TestApp", "YS.Schedule.TestApp\YS.Schedule.TestApp.csproj", "{ACDCD334-10C3-491F-A231-51E2E3768185}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "YS.Schedule.TestApp", "YS.Schedule.TestApp\YS.Schedule.TestApp.csproj", "{ACDCD334-10C3-491F-A231-51E2E3768185}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YS.Schedule.HostedService.Attribute", "YS.Schedule.HostedService.Attribute\YS.Schedule.HostedService.Attribute.csproj", "{38830249-A18C-4E3A-9035-DA413DC74258}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -37,6 +39,10 @@ Global
 		{ACDCD334-10C3-491F-A231-51E2E3768185}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{ACDCD334-10C3-491F-A231-51E2E3768185}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{ACDCD334-10C3-491F-A231-51E2E3768185}.Release|Any CPU.Build.0 = Release|Any CPU
+		{38830249-A18C-4E3A-9035-DA413DC74258}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{38830249-A18C-4E3A-9035-DA413DC74258}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{38830249-A18C-4E3A-9035-DA413DC74258}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{38830249-A18C-4E3A-9035-DA413DC74258}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -45,6 +51,7 @@ Global
 		{F31E8836-311F-4AF5-86BC-A11A256E5484} = {1EEDC6C7-94A2-4B99-9038-729FDDB4D612}
 		{E4B35FF7-9F88-4BC9-A81E-E3E235D4CBDC} = {8F53C0CF-7A44-4368-828E-3C0DD5538574}
 		{D6A34608-363D-4B84-8CDC-2D5F0634ED83} = {1EEDC6C7-94A2-4B99-9038-729FDDB4D612}
+		{38830249-A18C-4E3A-9035-DA413DC74258} = {1EEDC6C7-94A2-4B99-9038-729FDDB4D612}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {DB11BB21-3F5D-42D6-8737-F19C0666F1F8}

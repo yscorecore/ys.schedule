@@ -35,7 +35,7 @@ namespace YS.Schedule.Host
             TimeSpan waitTime = IntegerSecond ? WaitTimeBeforeFirstInterval + TimeSpan.FromMilliseconds(1000 - DateTimeOffset.Now.Millisecond) : WaitTimeBeforeFirstInterval;
             if (_timer == null)
             {
-                _timer = new Timer((s) => Tick((CancellationToken)s), _stoppingCts.Token, waitTime, Interval);
+                _timer = new Timer(this.TryTick, _stoppingCts.Token, waitTime, Interval);
             }
             else
             {
@@ -50,8 +50,21 @@ namespace YS.Schedule.Host
             _stoppingCts.Cancel();
             return Task.CompletedTask;
         }
-
+        private void TryTick(object state)
+        {
+            try
+            {
+                this.Tick((CancellationToken)state);
+            }
+            catch (Exception ex)
+            {
+                this.OnException(ex);
+            }
+        }
         protected abstract void Tick(CancellationToken state);
+        protected virtual void OnException(Exception exception)
+        { 
+        }
 
     }
 
@@ -60,7 +73,6 @@ namespace YS.Schedule.Host
     {
         public ScheduleHostedService()
         {
-
         }
         private YS.Lock.ILockService lockService;
         private IEnumerable<IScheduleProvider> providers;
